@@ -8,42 +8,29 @@ const ResultsFetcher = () => {
   const [name, setName] = useState(""); // Name state for student
 
   // Fetch data based on roll number input
-  const fetchData = () => {
-    if (!rollNo) {
-      setError("Please enter a roll number");
-      return;
+  fetch(`/api/cors-proxy?url=https://jntuhresults.up.railway.app/api/academicresult?htno=${rollNo}`)
+  .then((response) => response.json())
+  .then((data) => {
+    console.log("Fetched Data:", data);
+    if (data && data.Details && data.Details.NAME) {
+      setName(data.Details.NAME);
+    } else {
+      setName("Name not available");
     }
-  
-    setLoading(true);
-    setError("");
-  
-    // Use the proxy server
-    fetch(`http://localhost:5000/api/https://jntuhresults.up.railway.app/api/academicresult?htno=${rollNo}`)
-      .then((response) => {
-        console.log("Response status:", response.status);
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Fetched Data:", data);
-        if (data && data.Details && data.Details.NAME) {
-          setName(data.Details.NAME);
-        } else {
-          setName("Name not available");
-        }
-  
-        if (data && data.Results) {
-          setData(data);
-        } else {
-          setError("No results found for this roll number.");
-        }
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        setError("Error fetching data");
-        setLoading(false);
-      });
-  };
+
+    if (data && data.Results) {
+      setData(data);
+    } else {
+      setError("No results found for this roll number.");
+    }
+    setLoading(false);
+  })
+  .catch((error) => {
+    console.error("Error fetching data:", error);
+    setError("Error fetching data");
+    setLoading(false);
+  });
+
   
   
   // For testing purposes: Uncomment this and use mock data if API fails

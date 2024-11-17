@@ -1,15 +1,21 @@
+// api/cors-proxy.js
+const https = require('https');
+
 module.exports = async (req, res) => {
-    // CORS handling logic and proxying the external API requests
-    const externalUrl = `https://jntuhresults.up.railway.app/api/academicresult?htno=${req.query.htno}`;
-    
-    try {
-      const response = await fetch(externalUrl);
-      const data = await response.json();
-      
-      // Return the fetched data as response
-      res.status(200).json(data);
-    } catch (error) {
-      res.status(500).json({ error: "Error fetching data" });
-    }
-  };
+  const url = req.query.url;
   
+  // Fetch the URL provided in the query
+  https.get(url, (apiRes) => {
+    let data = '';
+    
+    apiRes.on('data', (chunk) => {
+      data += chunk;
+    });
+    
+    apiRes.on('end', () => {
+      res.status(200).json(JSON.parse(data));
+    });
+  }).on('error', (e) => {
+    res.status(500).json({ error: 'Error fetching data', message: e.message });
+  });
+};

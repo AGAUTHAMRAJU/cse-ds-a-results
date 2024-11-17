@@ -1,6 +1,6 @@
 {
-  "homepage": "https://agauthamraju.github.io/cse-ds-a-results",
-  "name": "my-app",
+  "homepage": "https://cse-ds-a-results.vercel.app/",
+  "name": "cse-ds-a-results",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
