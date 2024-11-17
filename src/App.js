@@ -13,23 +13,24 @@ const ResultsFetcher = () => {
       setError("Please enter a roll number");
       return;
     }
-
+  
     setLoading(true);
     setError("");
-
-    fetch(`https://jntuhresults.up.railway.app/api/academicresult?htno=${rollNo}`)
+  
+    // Use the proxy server
+    fetch(`http://localhost:5000/api/https://jntuhresults.up.railway.app/api/academicresult?htno=${rollNo}`)
       .then((response) => {
-        console.log("Response status:", response.status); // Log response status
+        console.log("Response status:", response.status);
         return response.json();
       })
       .then((data) => {
-        console.log("Fetched Data:", data); // Log the full response
+        console.log("Fetched Data:", data);
         if (data && data.Details && data.Details.NAME) {
           setName(data.Details.NAME);
         } else {
           setName("Name not available");
         }
-
+  
         if (data && data.Results) {
           setData(data);
         } else {
@@ -43,7 +44,8 @@ const ResultsFetcher = () => {
         setLoading(false);
       });
   };
-
+  
+  
   // For testing purposes: Uncomment this and use mock data if API fails
   // const fetchData = () => {
   //   const mockData = {
